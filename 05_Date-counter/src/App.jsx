@@ -25,13 +25,13 @@ function App() {
     return <h2 style={{ fontFamily: "monospace" }}>{result}</h2>;
   }
 
-  function handleStepInc() {
-    setStep((s) => s + 1);
-  }
+  // function handleStepInc() {
+  //   setStep((s) => s + 1);
+  // }
 
-  function handleStepDec() {
-    setStep((s) => s - 1);
-  }
+  // function handleStepDec() {
+  //   setStep((s) => s - 1);
+  // }
 
   function handleCountInc() {
     setCount((c) => c + step);
@@ -40,19 +40,50 @@ function App() {
   function handleCountDec() {
     setCount((c) => c - step);
   }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+
+  function handleReset() {
+    setCount(0);
+    setStep(1);
+  }
+
   return (
     <>
       <div className="step">
-        <button onClick={handleStepDec}>-</button>
-        <p>Step : {step}</p>
-        <button onClick={handleStepInc}>+</button>
+        <form>
+          {/* <button onClick={handleStepDec}>-</button> */}
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={step}
+            onChange={(e) => setStep(Number(e.target.value))}
+          />
+          <span>{step}</span>
+          {/* <button onClick={handleStepInc}>+</button> */}
+        </form>
       </div>
       <div className="count">
         <button onClick={handleCountDec}>-</button>
-        <p>Count : {count}</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Days.."
+            value={count}
+            onChange={(e) => setCount(Number(e.target.value))}
+          />
+        </form>
+
         <button onClick={handleCountInc}>+</button>
       </div>
       <div className="text">{text()}</div>
+
+      {count > 0 || step > 1 ? (
+        <button onClick={handleReset}>Reset</button>
+      ) : null}
     </>
   );
 }
