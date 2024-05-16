@@ -55,7 +55,7 @@ function App() {
   }
 
   function handleSplitBill(value) {
-    console.log(value);
+    // console.log(value);
 
     setNewFriend((friends) =>
       friends.map((friend) =>
@@ -84,7 +84,11 @@ function App() {
         </Button>
       </div>
       {selectFriend && (
-        <SplitBill selectFriend={selectFriend} onSplitBill={handleSplitBill} />
+        <SplitBill
+          selectFriend={selectFriend}
+          onSplitBill={handleSplitBill}
+          key={selectFriend.id}
+        />
       )}
     </div>
   );
