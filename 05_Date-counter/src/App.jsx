@@ -1,11 +1,31 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useReducer } from "react";
 import "./App.css";
 
+const initialState = { count: 0, step: 1 };
+
+function reducer(state, action) {
+  console.log(state, action);
+
+  switch (action.type) {
+    case "inc":
+      return { ...state, count: state.count + state.step };
+    case "dec":
+      return { ...state, count: state.count - state.step };
+    case "count":
+      return { ...state, count: action.payload };
+    case "step":
+      return { ...state, step: action.payload };
+    case "reset":
+      return initialState;
+    default:
+      throw new Error("Unknown Error");
+  }
+}
+
 function App() {
-  const [step, setStep] = useState(1);
-  const [count, setCount] = useState(0);
+  const [changingState, dispatch] = useReducer(reducer, initialState); // reducer is a function
+
+  const { count, step } = changingState;
 
   const date = new Date();
 
@@ -25,29 +45,8 @@ function App() {
     return <h2 style={{ fontFamily: "monospace" }}>{result}</h2>;
   }
 
-  // function handleStepInc() {
-  //   setStep((s) => s + 1);
-  // }
-
-  // function handleStepDec() {
-  //   setStep((s) => s - 1);
-  // }
-
-  function handleCountInc() {
-    setCount((c) => c + step);
-  }
-
-  function handleCountDec() {
-    setCount((c) => c - step);
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
-  }
-
-  function handleReset() {
-    setCount(0);
-    setStep(1);
   }
 
   return (
@@ -60,29 +59,33 @@ function App() {
             min="1"
             max="10"
             value={step}
-            onChange={(e) => setStep(Number(e.target.value))}
+            onChange={(e) =>
+              dispatch({ type: "step", payload: Number(e.target.value) })
+            }
           />
           <span>{step}</span>
           {/* <button onClick={handleStepInc}>+</button> */}
         </form>
       </div>
       <div className="count">
-        <button onClick={handleCountDec}>-</button>
+        <button onClick={() => dispatch({ type: "dec" })}>-</button>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Days.."
             value={count}
-            onChange={(e) => setCount(Number(e.target.value))}
+            onChange={(e) =>
+              dispatch({ type: "count", payload: Number(e.target.value) })
+            }
           />
         </form>
 
-        <button onClick={handleCountInc}>+</button>
+        <button onClick={() => dispatch({ type: "inc" })}>+</button>
       </div>
       <div className="text">{text()}</div>
 
-      {count > 0 || step > 1 ? (
-        <button onClick={handleReset}>Reset</button>
+      {count > 0 || step > 1 || count < 0 ? (
+        <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
       ) : null}
     </>
   );

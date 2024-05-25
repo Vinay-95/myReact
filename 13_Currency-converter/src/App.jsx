@@ -65,3 +65,22 @@ function App() {
         <option value="EUR">EUR</option>
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
+      </select>
+      <select
+        value={toCurrency}
+        onChange={(e) => setToCurrency(e.target.value)}
+        // disabled={isLoading}
+      >
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="CAD">CAD</option>
+        <option value="INR">INR</option>
+      </select>
+      <p>
+        {output} {toCurrency}
+      </p>
+    </div>
+  );
+}
+
+export default App;
